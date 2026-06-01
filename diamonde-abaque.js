@@ -223,23 +223,8 @@
     .app {
       max-width: 760px;
       margin: 0 auto;
-      padding: 40px 20px 28px;
-      background: var(--bg);
-    }
-
-    /* ---------- Header ---------- */
-    .app__header { text-align: center; margin-bottom: 28px; }
-    .app__title {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--ink);
-      margin: 0 0 8px;
-      letter-spacing: -0.02em;
-    }
-    .app__subtitle {
-      font-size: 15px;
-      color: var(--ink-soft);
-      margin: 0;
+      padding: 28px 20px;
+      background: transparent;
     }
 
     /* ---------- Stepper ---------- */
@@ -319,10 +304,9 @@
 
     /* ---------- Card ---------- */
     .card {
-      background: var(--surface);
+      background: var(--bg);
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
       padding: 32px;
     }
     .card__title {
@@ -505,19 +489,9 @@
     }
     .result__unit { font-size: 13px; font-weight: 500; color: var(--ink-muted); }
 
-    /* ---------- Footer ---------- */
-    .app__footer { text-align: center; margin-top: 28px; }
-    .app__footer p {
-      font-size: 13px;
-      color: var(--ink-muted);
-      margin: 0;
-    }
-
     /* ---------- Responsive ---------- */
     @media (max-width: 640px) {
-      .app { padding: 28px 16px 22px; }
-      .app__title { font-size: 23px; }
-      .app__subtitle { font-size: 14px; }
+      .app { padding: 22px 16px; }
       .card { padding: 22px 18px; }
 
       .stepper__bullet { width: 32px; height: 32px; font-size: 14px; }
@@ -542,11 +516,6 @@
      ---------------------------------------------------------- */
   var TEMPLATE = `
     <div class="app" part="app">
-      <header class="app__header">
-        <h1 class="app__title">Calculateur Abaque</h1>
-        <p class="app__subtitle">Calculateur professionnel de paramètres d'usinage pour diamonde.fr</p>
-      </header>
-
       <nav class="stepper" aria-label="Progression">
         <div class="stepper__track">
           <div class="stepper__progress" data-ref="progress" style="width: 0%"></div>
@@ -724,10 +693,6 @@
 
         </div>
       </section>
-
-      <footer class="app__footer">
-        <p>© 2026 diamonde.fr – Solutions professionnelles d'usinage</p>
-      </footer>
     </div>
   `;
 
