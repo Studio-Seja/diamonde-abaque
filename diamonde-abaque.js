@@ -118,7 +118,6 @@
     "frequence_rotation", "vitesse_avance", "prise_passe", "epaisseur_usinage"
   ];
 
-  var RANGE_TOLERANCE = 0.20; // ±20 % défini par le client
   var MAX_STEP = 3;
 
   /* ----------------------------------------------------------
@@ -166,11 +165,9 @@
     var puissance =
       (Z * effort * Math.sqrt((ap / 1000) * (Ø / 1000)) * N / 60 / 1000) / 0.665;
 
-    var ecart = cible > 0 ? Math.abs(emoy - cible) / cible : Infinity;
-
     return {
       cible: cible, emoy: emoy, fz: fz, vc: vc, ondu: ondu,
-      puissance: puissance, inRange: ecart <= RANGE_TOLERANCE
+      puissance: puissance
     };
   }
 
@@ -206,12 +203,6 @@
       --bg: #f4f5f7;
       --surface: #ffffff;
       --surface-soft: #f8fafc;
-      --success-bg: #ecfdf5;
-      --success-border: #a7f3d0;
-      --success-ink: #047857;
-      --warning-bg: #fff4e6;
-      --warning-border: #fcd9a8;
-      --warning-ink: #b45309;
       --radius: 14px;
       --radius-sm: 10px;
       --shadow: 0 1px 3px rgba(15, 23, 42, 0.06),
@@ -413,58 +404,6 @@
     }
     .btn--ghost:hover { background: var(--surface-soft); }
 
-    /* ---------- Alert ---------- */
-    .alert {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      border-radius: var(--radius-sm);
-      padding: 16px 18px;
-      margin-bottom: 24px;
-      border: 1px solid transparent;
-    }
-    .alert__icon {
-      flex: 0 0 auto;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      margin-top: 1px;
-      position: relative;
-    }
-    .alert__title { font-weight: 600; margin: 0 0 4px; font-size: 15px; }
-    .alert__text { margin: 0; font-size: 14px; line-height: 1.45; }
-
-    .alert.is-success { background: var(--success-bg); border-color: var(--success-border); }
-    .alert.is-success .alert__title,
-    .alert.is-success .alert__text { color: var(--success-ink); }
-    .alert.is-success .alert__icon { background: var(--success-ink); }
-    .alert.is-success .alert__icon::after {
-      content: "";
-      position: absolute;
-      left: 7px; top: 6px;
-      width: 6px; height: 10px;
-      border-right: 2px solid #fff;
-      border-bottom: 2px solid #fff;
-      transform: rotate(45deg);
-    }
-
-    .alert.is-warning { background: var(--warning-bg); border-color: var(--warning-border); }
-    .alert.is-warning .alert__title,
-    .alert.is-warning .alert__text { color: var(--warning-ink); }
-    .alert.is-warning .alert__icon { background: var(--orange); }
-    .alert.is-warning .alert__icon::before {
-      content: "!";
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 1;
-    }
-
     /* ---------- Results ---------- */
     .results { display: flex; flex-direction: column; }
     .result {
@@ -627,14 +566,6 @@
             <h2 class="card__title">Résultats calculés</h2>
             <p class="card__desc">Consultez les paramètres d'usinage calculés en fonction de vos données</p>
 
-            <div class="alert" data-ref="alert" role="status">
-              <span class="alert__icon" aria-hidden="true"></span>
-              <div class="alert__body">
-                <p class="alert__title" data-ref="alertTitle"></p>
-                <p class="alert__text" data-ref="alertText"></p>
-              </div>
-            </div>
-
             <div class="results">
               <div class="result">
                 <div class="result__info">
@@ -715,9 +646,6 @@
       this._currentStep = 1;
       this._refs = {
         progress:   this.shadowRoot.querySelector('[data-ref="progress"]'),
-        alert:      this.shadowRoot.querySelector('[data-ref="alert"]'),
-        alertTitle: this.shadowRoot.querySelector('[data-ref="alertTitle"]'),
-        alertText:  this.shadowRoot.querySelector('[data-ref="alertText"]'),
         form:       this.shadowRoot.querySelector('[data-ref="form"]'),
         matSelect:  this.shadowRoot.querySelector('[data-name="materiaux"]')
       };
@@ -820,18 +748,6 @@
         var el = self.shadowRoot.querySelector('[data-result="' + k + '"]');
         if (el) el.textContent = self._fmt(r[k]);
       });
-
-      var a = this._refs.alert;
-      a.classList.remove("is-success", "is-warning");
-      if (r.inRange) {
-        a.classList.add("is-success");
-        this._refs.alertTitle.textContent = "Dans la plage recommandée";
-        this._refs.alertText.textContent = "L'épaisseur moyenne de copeau calculée (Emoy) est dans une marge de ±20% de la valeur cible pour ce matériau.";
-      } else {
-        a.classList.add("is-warning");
-        this._refs.alertTitle.textContent = "Hors plage recommandée";
-        this._refs.alertText.textContent = "L'épaisseur moyenne de copeau calculée (Emoy) s'écarte de plus de ±20% de la valeur cible pour ce matériau. Ajustez vos paramètres d'usinage.";
-      }
     }
 
     /* ---------------- navigation ---------------- */
