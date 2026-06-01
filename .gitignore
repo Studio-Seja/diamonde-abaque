@@ -1,0 +1,12 @@
+# Local dev / preview tooling (Claude Code workspace)
+.claude/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Node (au cas où)
+node_modules/
