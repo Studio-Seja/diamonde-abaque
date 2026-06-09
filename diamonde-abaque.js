@@ -118,8 +118,6 @@
     "frequence_rotation", "vitesse_avance", "prise_passe", "epaisseur_usinage"
   ];
 
-  var MAX_STEP = 3;
-
   /* ----------------------------------------------------------
      Calculs (formules exactes du cahier des charges)
      ---------------------------------------------------------- */
@@ -212,85 +210,10 @@
     *, *::before, *::after { box-sizing: border-box; }
 
     .app {
-      max-width: 760px;
+      max-width: 980px;
       margin: 0 auto;
       padding: 28px 20px;
       background: transparent;
-    }
-
-    /* ---------- Stepper ---------- */
-    .stepper { margin-bottom: 24px; }
-    .stepper__track {
-      position: relative;
-      height: 5px;
-      border-radius: 999px;
-      background: var(--line);
-      overflow: hidden;
-      margin-bottom: 18px;
-    }
-    .stepper__progress {
-      position: absolute;
-      inset: 0 auto 0 0;
-      height: 100%;
-      background: var(--navy);
-      border-radius: 999px;
-      transition: width 0.35s ease;
-    }
-    .stepper__steps {
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-    }
-    .stepper__step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      flex: 1;
-      text-align: center;
-      color: var(--ink-muted);
-    }
-    .stepper__bullet {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      border: 2px solid var(--line);
-      background: var(--surface);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 15px;
-      color: var(--ink-muted);
-      transition: all 0.25s ease;
-    }
-    .stepper__label {
-      font-size: 13px;
-      font-weight: 500;
-    }
-    .stepper__step.is-active { color: var(--navy); }
-    .stepper__step.is-active .stepper__bullet {
-      background: var(--navy);
-      border-color: var(--navy);
-      color: #fff;
-    }
-    .stepper__step.is-done { color: var(--navy); }
-    .stepper__step.is-done .stepper__bullet {
-      background: var(--navy);
-      border-color: var(--navy);
-      color: #fff;
-      font-size: 0;
-    }
-    .stepper__step.is-done .stepper__bullet::after {
-      content: "";
-      width: 11px;
-      height: 6px;
-      border-left: 2.5px solid #fff;
-      border-bottom: 2.5px solid #fff;
-      transform: rotate(-45deg) translateY(-1px);
     }
 
     /* ---------- Card ---------- */
@@ -300,28 +223,34 @@
       border-radius: var(--radius);
       padding: 32px;
     }
-    .card__title {
-      font-size: 20px;
-      font-weight: 600;
-      margin: 0 0 6px;
-      color: var(--ink);
-    }
-    .card__desc {
-      font-size: 14px;
-      color: var(--ink-soft);
-      margin: 0 0 24px;
-    }
 
-    /* ---------- Slides ---------- */
-    .slide { display: none; }
-    .slide.is-active { display: block; animation: fade 0.25s ease; }
-    @keyframes fade {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
+    /* ---------- Layout 2 colonnes ---------- */
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: 36px;
+      align-items: start;
     }
+    .panel__title {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 20px;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .panel--results { position: sticky; top: 16px; }
+
+    /* Grille interne du panneau données : matériau en pleine largeur,
+       puis paires de champs. */
+    .fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 18px;
+    }
+    .fields .field--full { grid-column: 1 / -1; }
 
     /* ---------- Fields ---------- */
-    .field { margin-bottom: 20px; }
+    .field { margin: 0; }
     .field__label {
       display: block;
       font-size: 14px;
@@ -375,34 +304,24 @@
     /* ---------- Buttons ---------- */
     .actions {
       display: flex;
-      gap: 12px;
-      margin-top: 28px;
+      justify-content: flex-start;
+      margin-top: 24px;
     }
-    .actions--end { justify-content: flex-end; }
-    .actions--split { justify-content: space-between; }
-
     .btn {
       font-family: inherit;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       border-radius: var(--radius-sm);
-      padding: 12px 22px;
+      padding: 10px 18px;
       cursor: pointer;
-      border: 1px solid transparent;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
       transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
       line-height: 1.2;
     }
+    .btn:hover { background: var(--surface-soft); border-color: var(--ink-muted); }
     .btn:active { transform: translateY(1px); }
-    .btn--primary { background: var(--navy); color: #fff; }
-    .btn--primary:hover { background: var(--navy-dark); }
-    .btn--accent { background: var(--orange); color: #fff; }
-    .btn--accent:hover { background: var(--orange-dark); }
-    .btn--ghost {
-      background: var(--surface);
-      color: var(--ink);
-      border-color: var(--line);
-    }
-    .btn--ghost:hover { background: var(--surface-soft); }
 
     /* ---------- Results ---------- */
     .results { display: flex; flex-direction: column; }
@@ -429,24 +348,23 @@
     .result__unit { font-size: 13px; font-weight: 500; color: var(--ink-muted); }
 
     /* ---------- Responsive ---------- */
-    @media (max-width: 640px) {
+    @media (max-width: 820px) {
+      .layout {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+      .panel--results {
+        position: static;
+        padding-top: 24px;
+        border-top: 1px solid var(--line);
+      }
+    }
+    @media (max-width: 540px) {
       .app { padding: 22px 16px; }
       .card { padding: 22px 18px; }
-
-      .stepper__bullet { width: 32px; height: 32px; font-size: 14px; }
-      .stepper__label { font-size: 11px; }
-      .stepper__step { gap: 6px; }
-
-      .result { flex-direction: row; align-items: center; }
+      .fields { grid-template-columns: 1fr; gap: 14px; }
       .result__value { font-size: 18px; }
       .result__desc { display: none; }
-
-      .actions { gap: 10px; }
-      .btn { padding: 12px 16px; font-size: 14px; flex: 1; text-align: center; }
-      .actions--end { justify-content: stretch; }
-    }
-    @media (max-width: 340px) {
-      .stepper__label { display: none; }
     }
   `;
 
@@ -455,116 +373,76 @@
      ---------------------------------------------------------- */
   var TEMPLATE = `
     <div class="app" part="app">
-      <nav class="stepper" aria-label="Progression">
-        <div class="stepper__track">
-          <div class="stepper__progress" data-ref="progress" style="width: 0%"></div>
-        </div>
-        <ol class="stepper__steps">
-          <li class="stepper__step is-active" data-step="1">
-            <span class="stepper__bullet">1</span>
-            <span class="stepper__label">Géométrie outil</span>
-          </li>
-          <li class="stepper__step" data-step="2">
-            <span class="stepper__bullet">2</span>
-            <span class="stepper__label">Conditions usinage</span>
-          </li>
-          <li class="stepper__step" data-step="3">
-            <span class="stepper__bullet">3</span>
-            <span class="stepper__label">Résultats</span>
-          </li>
-        </ol>
-      </nav>
-
       <section class="card">
-        <div data-ref="form">
+        <div class="layout" data-ref="form">
 
-          <!-- Slide 1 -->
-          <div class="slide is-active" data-slide="1">
-            <h2 class="card__title">Géométrie de l'outil</h2>
-            <p class="card__desc">Définissez les spécifications de l'outil de coupe et le matériau à usiner</p>
+          <!-- Colonne Données -->
+          <div class="panel panel--data">
+            <h2 class="panel__title">Données</h2>
 
-            <div class="field" data-field="diametre">
-              <label class="field__label" for="abq-diametre">Diamètre Ø (mm)</label>
-              <input class="field__input" type="number" id="abq-diametre" data-name="diametre" inputmode="decimal" step="any" min="0" value="120" />
-              <p class="field__hint">Le diamètre de l'outil de coupe en millimètres</p>
-              <p class="field__error"></p>
+            <div class="fields">
+              <div class="field field--full" data-field="materiaux">
+                <label class="field__label" for="abq-materiaux">Matériau</label>
+                <select class="field__input field__select" id="abq-materiaux" data-name="materiaux"></select>
+              </div>
+
+              <div class="field" data-field="diametre">
+                <label class="field__label" for="abq-diametre">Diamètre Ø (mm)</label>
+                <input class="field__input" type="number" id="abq-diametre" data-name="diametre" inputmode="decimal" step="any" min="0" />
+                <p class="field__error"></p>
+              </div>
+
+              <div class="field" data-field="nombre_coupe">
+                <label class="field__label" for="abq-nombre_coupe">Nombre de dents Z</label>
+                <input class="field__input" type="number" id="abq-nombre_coupe" data-name="nombre_coupe" inputmode="numeric" step="1" min="1" />
+                <p class="field__error"></p>
+              </div>
+
+              <div class="field" data-field="angle_coupe">
+                <label class="field__label" for="abq-angle_coupe">Angle de coupe γ (°)</label>
+                <input class="field__input" type="number" id="abq-angle_coupe" data-name="angle_coupe" inputmode="decimal" step="any" />
+                <p class="field__error"></p>
+              </div>
+
+              <div class="field" data-field="taux_humidite">
+                <label class="field__label" for="abq-taux_humidite">Taux d'humidité (%)</label>
+                <input class="field__input" type="number" id="abq-taux_humidite" data-name="taux_humidite" inputmode="decimal" step="any" min="0" />
+                <p class="field__error"></p>
+              </div>
+
+              <div class="field" data-field="frequence_rotation">
+                <label class="field__label" for="abq-frequence_rotation">Vitesse de rotation N (tr/min)</label>
+                <input class="field__input" type="number" id="abq-frequence_rotation" data-name="frequence_rotation" inputmode="numeric" step="any" min="0" />
+                <p class="field__error"></p>
+              </div>
+
+              <div class="field" data-field="vitesse_avance">
+                <label class="field__label" for="abq-vitesse_avance">Vitesse d'avance Vf (m/min)</label>
+                <input class="field__input" type="number" id="abq-vitesse_avance" data-name="vitesse_avance" inputmode="decimal" step="any" min="0" />
+                <p class="field__error"></p>
+              </div>
+
+              <div class="field" data-field="prise_passe">
+                <label class="field__label" for="abq-prise_passe">Profondeur de passe ap (mm)</label>
+                <input class="field__input" type="number" id="abq-prise_passe" data-name="prise_passe" inputmode="decimal" step="any" min="0" />
+                <p class="field__error"></p>
+              </div>
+
+              <div class="field" data-field="epaisseur_usinage">
+                <label class="field__label" for="abq-epaisseur_usinage">Épaisseur usinée ae (mm)</label>
+                <input class="field__input" type="number" id="abq-epaisseur_usinage" data-name="epaisseur_usinage" inputmode="decimal" step="any" min="0" />
+                <p class="field__error"></p>
+              </div>
             </div>
 
-            <div class="field" data-field="nombre_coupe">
-              <label class="field__label" for="abq-nombre_coupe">Nombre de dents Z</label>
-              <input class="field__input" type="number" id="abq-nombre_coupe" data-name="nombre_coupe" inputmode="numeric" step="1" min="1" value="2" />
-              <p class="field__hint">Le nombre d'arêtes de coupe sur l'outil</p>
-              <p class="field__error"></p>
-            </div>
-
-            <div class="field" data-field="angle_coupe">
-              <label class="field__label" for="abq-angle_coupe">Angle de coupe γ (°)</label>
-              <input class="field__input" type="number" id="abq-angle_coupe" data-name="angle_coupe" inputmode="decimal" step="any" value="25" />
-              <p class="field__hint">L'angle de coupe de l'outil en degrés</p>
-              <p class="field__error"></p>
-            </div>
-
-            <div class="field" data-field="materiaux">
-              <label class="field__label" for="abq-materiaux">Matériau</label>
-              <select class="field__input field__select" id="abq-materiaux" data-name="materiaux"></select>
-              <p class="field__hint">Choisissez le matériau à usiner</p>
-            </div>
-
-            <div class="actions actions--end">
-              <button type="button" class="btn btn--primary" data-action="next">Suivant</button>
-            </div>
-          </div>
-
-          <!-- Slide 2 -->
-          <div class="slide" data-slide="2">
-            <h2 class="card__title">Paramètres d'usinage</h2>
-            <p class="card__desc">Définissez les conditions d'usinage pour votre opération de coupe</p>
-
-            <div class="field" data-field="taux_humidite">
-              <label class="field__label" for="abq-taux_humidite">Taux d'humidité (%)</label>
-              <input class="field__input" type="number" id="abq-taux_humidite" data-name="taux_humidite" inputmode="decimal" step="any" min="0" value="12" />
-              <p class="field__hint">Le taux d'humidité du matériau à usiner</p>
-              <p class="field__error"></p>
-            </div>
-
-            <div class="field" data-field="frequence_rotation">
-              <label class="field__label" for="abq-frequence_rotation">Vitesse de rotation N (tr/min)</label>
-              <input class="field__input" type="number" id="abq-frequence_rotation" data-name="frequence_rotation" inputmode="numeric" step="any" min="0" value="6000" />
-              <p class="field__hint">La vitesse de rotation de la broche en tours par minute</p>
-              <p class="field__error"></p>
-            </div>
-
-            <div class="field" data-field="vitesse_avance">
-              <label class="field__label" for="abq-vitesse_avance">Vitesse d'avance Vf (m/min)</label>
-              <input class="field__input" type="number" id="abq-vitesse_avance" data-name="vitesse_avance" inputmode="decimal" step="any" min="0" value="12" />
-              <p class="field__hint">La vitesse d'avance en mètres par minute</p>
-              <p class="field__error"></p>
-            </div>
-
-            <div class="field" data-field="prise_passe">
-              <label class="field__label" for="abq-prise_passe">Profondeur de passe ap (mm)</label>
-              <input class="field__input" type="number" id="abq-prise_passe" data-name="prise_passe" inputmode="decimal" step="any" min="0" value="6" />
-              <p class="field__hint">La profondeur de coupe par passe en millimètres</p>
-              <p class="field__error"></p>
-            </div>
-
-            <div class="field" data-field="epaisseur_usinage">
-              <label class="field__label" for="abq-epaisseur_usinage">Épaisseur usinée ae (mm)</label>
-              <input class="field__input" type="number" id="abq-epaisseur_usinage" data-name="epaisseur_usinage" inputmode="decimal" step="any" min="0" value="50" />
-              <p class="field__hint">L'épaisseur de la pièce à usiner</p>
-              <p class="field__error"></p>
-            </div>
-
-            <div class="actions actions--split">
-              <button type="button" class="btn btn--ghost" data-action="prev">Retour</button>
-              <button type="button" class="btn btn--primary" data-action="next">Suivant</button>
+            <div class="actions">
+              <button type="button" class="btn" data-action="reset">Réinitialiser</button>
             </div>
           </div>
 
-          <!-- Slide 3 -->
-          <div class="slide" data-slide="3">
-            <h2 class="card__title">Résultats calculés</h2>
-            <p class="card__desc">Consultez les paramètres d'usinage calculés en fonction de vos données</p>
+          <!-- Colonne Résultats -->
+          <div class="panel panel--results">
+            <h2 class="panel__title">Résultats</h2>
 
             <div class="results">
               <div class="result">
@@ -615,11 +493,6 @@
                 <p class="result__value"><span data-result="puissance">–</span> <span class="result__unit">kW</span></p>
               </div>
             </div>
-
-            <div class="actions actions--split">
-              <button type="button" class="btn btn--ghost" data-action="prev">Retour</button>
-              <button type="button" class="btn btn--accent" data-action="reset">Nouveau calcul</button>
-            </div>
           </div>
 
         </div>
@@ -643,20 +516,16 @@
       this.shadowRoot.innerHTML = "<style>" + CSS + "</style>" + TEMPLATE;
 
       this._state = {};
-      this._currentStep = 1;
       this._refs = {
-        progress:   this.shadowRoot.querySelector('[data-ref="progress"]'),
-        form:       this.shadowRoot.querySelector('[data-ref="form"]'),
-        matSelect:  this.shadowRoot.querySelector('[data-name="materiaux"]')
+        form:      this.shadowRoot.querySelector('[data-ref="form"]'),
+        matSelect: this.shadowRoot.querySelector('[data-name="materiaux"]')
       };
-      this._slides = Array.prototype.slice.call(this.shadowRoot.querySelectorAll(".slide"));
-      this._steps  = Array.prototype.slice.call(this.shadowRoot.querySelectorAll(".stepper__step"));
 
       this._buildMaterialSelect();
-      this._resetState();
+      this._loadDefaults();
       this._writeStateToDom();
       this._bindEvents();
-      this._goToStep(1);
+      this._update();
     }
 
     /* ---------------- helpers ---------------- */
@@ -664,7 +533,7 @@
     _fieldWrap(name) { return this.shadowRoot.querySelector('[data-field="' + name + '"]'); }
 
     /* ---------------- state ---------------- */
-    _resetState() {
+    _loadDefaults() {
       this._state = {};
       for (var k in DEFAULTS) {
         if (DEFAULTS.hasOwnProperty(k)) this._state[k] = DEFAULTS[k];
@@ -683,6 +552,10 @@
       if (k === "materiaux") this._state[k] = el.value;
       else this._state[k] = el.value === "" ? "" : parseFloat(el.value);
     }
+    _readAll() {
+      var self = this;
+      Object.keys(DEFAULTS).forEach(function (k) { self._readField(k); });
+    }
 
     /* ---------------- matériaux ---------------- */
     _buildMaterialSelect() {
@@ -697,11 +570,6 @@
     }
 
     /* ---------------- validation ---------------- */
-    _fieldsForStep(step) {
-      if (step === 1) return ["diametre", "nombre_coupe", "angle_coupe"];
-      if (step === 2) return ["taux_humidite", "frequence_rotation", "vitesse_avance", "prise_passe", "epaisseur_usinage"];
-      return [];
-    }
     _setError(k, msg) {
       var wrap = this._fieldWrap(k);
       if (!wrap) return;
@@ -714,24 +582,30 @@
         if (errEl) errEl.textContent = "";
       }
     }
-    _validateStep(step) {
+    /**
+     * Valide tous les champs numériques.
+     * - Champs vides : aucune erreur affichée (saisie en cours), mais
+     *   le calcul est bloqué.
+     * - Valeurs non numériques ou hors bornes : erreur affichée.
+     */
+    _validateAll() {
       var ok = true;
       var self = this;
-      this._fieldsForStep(step).forEach(function (k) {
+      NUMERIC_FIELDS.forEach(function (k) {
         var el = self._$(k);
         var raw = el.value.trim();
+        if (raw === "") { self._setError(k, ""); ok = false; return; }
         var num = parseFloat(raw);
-
-        if (raw === "" || isNaN(num)) {
-          self._setError(k, "Veuillez saisir une valeur numérique.");
+        if (isNaN(num)) {
+          self._setError(k, "Valeur numérique attendue.");
           ok = false; return;
         }
         if ((k === "diametre" || k === "frequence_rotation" || k === "nombre_coupe") && num <= 0) {
-          self._setError(k, "La valeur doit être supérieure à 0.");
+          self._setError(k, "Doit être supérieur à 0.");
           ok = false; return;
         }
         if (num < 0) {
-          self._setError(k, "La valeur ne peut pas être négative.");
+          self._setError(k, "Valeur négative.");
           ok = false; return;
         }
         self._setError(k, "");
@@ -741,54 +615,32 @@
 
     /* ---------------- rendu résultats ---------------- */
     _fmt(n) { return isFinite(n) ? n.toFixed(2) : "–"; }
-    _renderResults() {
-      var r = compute(this._state);
+    _renderResults(r) {
       var self = this;
       ["cible", "emoy", "fz", "vc", "ondu", "puissance"].forEach(function (k) {
         var el = self.shadowRoot.querySelector('[data-result="' + k + '"]');
-        if (el) el.textContent = self._fmt(r[k]);
+        if (!el) return;
+        el.textContent = r ? self._fmt(r[k]) : "–";
       });
     }
 
-    /* ---------------- navigation ---------------- */
-    _goToStep(step) {
-      this._currentStep = step;
-      this._slides.forEach(function (s) {
-        s.classList.toggle("is-active", parseInt(s.dataset.slide, 10) === step);
-      });
-      this._steps.forEach(function (s) {
-        var n = parseInt(s.dataset.step, 10);
-        s.classList.toggle("is-active", n === step);
-        s.classList.toggle("is-done", n < step);
-      });
-      this._refs.progress.style.width = (((step - 1) / (MAX_STEP - 1)) * 100) + "%";
-      if (step === MAX_STEP) this._renderResults();
-      this._scrollIntoViewIfNeeded();
+    /* ---------------- recalcul live ---------------- */
+    _update() {
+      this._readAll();
+      var ok = this._validateAll();
+      this._renderResults(ok ? compute(this._state) : null);
     }
-    _next() {
-      if (!this._validateStep(this._currentStep)) return;
-      var self = this;
-      this._fieldsForStep(this._currentStep).forEach(function (k) { self._readField(k); });
-      if (this._currentStep === 1) this._readField("materiaux");
-      if (this._currentStep < MAX_STEP) this._goToStep(this._currentStep + 1);
-    }
-    _prev() {
-      if (this._currentStep > 1) this._goToStep(this._currentStep - 1);
-    }
+
+    /* ---------------- reset ---------------- */
     _reset() {
       var self = this;
-      this._resetState();
-      this._writeStateToDom();
-      this._fieldsForStep(1).concat(this._fieldsForStep(2)).forEach(function (k) { self._setError(k, ""); });
-      this._goToStep(1);
-    }
-
-    _scrollIntoViewIfNeeded() {
-      // Si le haut du widget n'est plus visible, on le ramène en vue.
-      var rect = this.getBoundingClientRect();
-      if (rect.top < 0) {
-        this.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+      NUMERIC_FIELDS.forEach(function (k) {
+        var el = self._$(k);
+        if (el) el.value = "";
+        self._state[k] = "";
+        self._setError(k, "");
+      });
+      this._renderResults(null);
     }
 
     /* ---------------- événements ---------------- */
@@ -798,29 +650,15 @@
         var btn = e.target.closest("[data-action]");
         if (!btn) return;
         e.preventDefault();
-        var a = btn.dataset.action;
-        if (a === "next") self._next();
-        else if (a === "prev") self._prev();
-        else if (a === "reset") self._reset();
-      });
-
-      // Entrée clavier = Suivant (sans <form>, on intercepte sur les inputs)
-      this._refs.form.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" && e.target.matches("input")) {
-          e.preventDefault();
-          self._next();
-        }
+        if (btn.dataset.action === "reset") self._reset();
       });
 
       NUMERIC_FIELDS.forEach(function (k) {
         var el = self._$(k);
         if (!el) return;
-        el.addEventListener("input", function () {
-          if (self._fieldWrap(k).classList.contains("has-error")) self._setError(k, "");
-          self._readField(k);
-        });
+        el.addEventListener("input", function () { self._update(); });
       });
-      this._refs.matSelect.addEventListener("change", function () { self._readField("materiaux"); });
+      this._refs.matSelect.addEventListener("change", function () { self._update(); });
     }
   }
 
