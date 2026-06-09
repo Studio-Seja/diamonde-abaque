@@ -210,9 +210,8 @@
     *, *::before, *::after { box-sizing: border-box; }
 
     .app {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 28px 20px;
+      width: 100%;
+      padding: 0;
       background: transparent;
     }
 
@@ -360,7 +359,6 @@
       }
     }
     @media (max-width: 540px) {
-      .app { padding: 22px 16px; }
       .card { padding: 22px 18px; }
       .fields { grid-template-columns: 1fr; gap: 14px; }
       .result__value { font-size: 18px; }
