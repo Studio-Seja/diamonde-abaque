@@ -396,18 +396,6 @@
                 <p class="field__error"></p>
               </div>
 
-              <div class="field" data-field="angle_coupe">
-                <label class="field__label" for="abq-angle_coupe">Angle de coupe γ (°)</label>
-                <input class="field__input" type="number" id="abq-angle_coupe" data-name="angle_coupe" inputmode="decimal" step="any" />
-                <p class="field__error"></p>
-              </div>
-
-              <div class="field" data-field="taux_humidite">
-                <label class="field__label" for="abq-taux_humidite">Taux d'humidité (%)</label>
-                <input class="field__input" type="number" id="abq-taux_humidite" data-name="taux_humidite" inputmode="decimal" step="any" min="0" />
-                <p class="field__error"></p>
-              </div>
-
               <div class="field" data-field="frequence_rotation">
                 <label class="field__label" for="abq-frequence_rotation">Vitesse de rotation N (tr/min)</label>
                 <input class="field__input" type="number" id="abq-frequence_rotation" data-name="frequence_rotation" inputmode="numeric" step="any" min="0" />
@@ -429,6 +417,18 @@
               <div class="field" data-field="epaisseur_usinage">
                 <label class="field__label" for="abq-epaisseur_usinage">Épaisseur usinée ae (mm)</label>
                 <input class="field__input" type="number" id="abq-epaisseur_usinage" data-name="epaisseur_usinage" inputmode="decimal" step="any" min="0" />
+                <p class="field__error"></p>
+              </div>
+
+              <div class="field" data-field="angle_coupe">
+                <label class="field__label" for="abq-angle_coupe">Angle de coupe γ (°)</label>
+                <input class="field__input" type="number" id="abq-angle_coupe" data-name="angle_coupe" inputmode="decimal" step="any" />
+                <p class="field__error"></p>
+              </div>
+
+              <div class="field" data-field="taux_humidite">
+                <label class="field__label" for="abq-taux_humidite">Taux d'humidité (%)</label>
+                <input class="field__input" type="number" id="abq-taux_humidite" data-name="taux_humidite" inputmode="decimal" step="any" min="0" />
                 <p class="field__error"></p>
               </div>
             </div>
